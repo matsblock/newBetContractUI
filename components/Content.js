@@ -25,7 +25,9 @@ export default function Content() {
 
     useEffect(() => {
         if (isWeb3Enabled && account) {
-            updateUI();
+            getGameCreate()
+            // getMatchStatus()
+            getOdds()
         }
     }, [
         account,
@@ -131,7 +133,7 @@ export default function Content() {
 
                     <Image
                         alt=""
-                        src="https://logodownload.org/wp-content/uploads/2018/11/real-valladolid-logo-escudo-768x863.png                       "
+                        src="https://logodownload.org/wp-content/uploads/2018/11/real-valladolid-logo-escudo-768x863.png"
                         width={110}
                         height={120}
                     />
@@ -237,20 +239,9 @@ export default function Content() {
                             text="Claim Rewards"
                             theme="primary"
                         />
-
-
                     </div>
-
-
-
                 }
-
-
-
-
             </div>
-
-
         </div>
     )
 }
