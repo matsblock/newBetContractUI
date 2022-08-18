@@ -1,8 +1,15 @@
-const PriceConsumerV3Address = "0xdA4494619e52574244B38ac72C6033c3c4ed158A"
+const daiContractAddress = "0x29282139fD1A88ccAED6d3bb7f547192144C0f95"
+const astonVillaVsEvertonContractAddress = "0x492A982dd50696383F9e17eb87E52f5A158beDfE"
+const SevillaVSValladolidContractAddress = "0x492A982dd50696383F9e17eb87E52f5A158beDfE"
 
-const PriceConsumerV3Abi = require("./PriceConsumerV3Abi.json")
+const daiAbi = require("./daiAbi.json")
+const betContractAbi = require("./betContractAbi.json")
+
 
 module.exports = {
-    PriceConsumerV3Abi,
-    PriceConsumerV3Address,
+    daiAbi,
+    daiContractAddress,
+    betContractAbi,
+    astonVillaVsEvertonContractAddress,
+    SevillaVSValladolidContractAddress
 }
