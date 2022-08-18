@@ -238,17 +238,8 @@ export default function Content() {
                             text="Claim Rewards"
                             theme="primary"
                         />
-
-
                     </div>
-
-
-
                 }
-
-
-
-
             </div>
 
 
