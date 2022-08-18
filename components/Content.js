@@ -5,7 +5,6 @@ import { ethers } from "ethers"
 import { Button, Typography, Input, Form, Card, Modal, Radios, SendTransaction } from "web3uikit"
 import { Moralis } from "moralis"
 import Image from 'next/image'
-import ModalTest from "./ModalTest";
 
 export default function Content() {
     const { account, isWeb3Enabled } = useMoralis()
@@ -114,7 +113,7 @@ export default function Content() {
 
     return (
         <div>
-            <div class="center"
+            <div className="center"
                 style={{
                     width: '270px'
                 }}
@@ -139,7 +138,7 @@ export default function Content() {
                 </Card>
 
 
-                {!ifFinishedHideButtons && <div class="center" style={{
+                {!ifFinishedHideButtons && <div className="center" style={{
                     width: '200px',
                 }}>
                     <Radios
@@ -238,8 +237,17 @@ export default function Content() {
                             text="Claim Rewards"
                             theme="primary"
                         />
+
+
                     </div>
+
+
+
                 }
+
+
+
+
             </div>
 
 
