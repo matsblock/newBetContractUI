@@ -1,6 +1,5 @@
 import { ConnectButton, Typography, Button } from "web3uikit"
 import { daiAbi, daiContractAddress, betContractAbi, astonVillaVsEvertonContractAddress } from "../constants"
-import { useMoralis, useWeb3Contract } from "react-moralis"
 import { Moralis } from "moralis"
 import { useState, useEffect } from "react"
 
@@ -30,7 +29,7 @@ export default function Header() {
                         onCopy={function noRefCheck() { }}
                         variant="h1"
                     >
-                        The Crypto Betting Site
+                        The Crypto Betting Site v0.0.1
                     </Typography>
 
                     <ConnectButton /></div>

@@ -5,6 +5,7 @@ import { ethers } from "ethers"
 import { Button, Typography, Input, Form, Card, Modal, Radios, SendTransaction } from "web3uikit"
 import { Moralis } from "moralis"
 import Image from 'next/image'
+import moment from 'moment'
 
 export default function Content() {
     const { account, isWeb3Enabled } = useMoralis()
@@ -22,11 +23,14 @@ export default function Content() {
     const [homeOdd, setHomeOdd] = useState("")
     const [awayOdd, setAwayOdd] = useState("")
     const [tiedOdd, setTiedOdd] = useState("")
+    const [matchDate, setMatchDate] = useState("")
+
+
 
     useEffect(() => {
         if (isWeb3Enabled && account) {
             getGameCreate()
-            // getMatchStatus()
+            getMatchStatus(matchDate)
             getOdds()
         }
     }, [
@@ -36,27 +40,18 @@ export default function Content() {
         userDaiBalance,
         user2DaiBalance,
         gameCreate,
-        cardDescription
+        cardDescription,
+        matchDate
     ]);
 
-    async function updateUI() {
-        getGameCreate()
-        getMatchStatus()
-        getOdds()
-    }
+    // async function updateUI() {
+    //     getGameCreate()
+    //     getMatchStatus()
+    //     getOdds()
+    // }
 
 
-    function convertUnixTime(unix) {
-        let a = new Date(unix * 1000),
-            year = a.getFullYear(),
-            months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            month = months[a.getMonth()],
-            date = a.getDate(),
-            hour = a.getHours(),
-            min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes(),
-            sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds();
-        return `${month} ${date}, ${year}, ${hour}:${min}:${sec}`;
-    }
+
 
     async function getOdds() {
         const sendOptions_home = {
@@ -83,6 +78,18 @@ export default function Content() {
         setTiedOdd(ethers.utils.formatEther(await Moralis.executeFunction(sendOptions_tied)));
     }
 
+    function convertUnixTime(unix) {
+        let a = new Date(unix * 1000),
+            year = a.getFullYear(),
+            months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            month = months[a.getMonth()],
+            date = a.getDate(),
+            hour = a.getHours(),
+            min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes(),
+            sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds();
+        return `${month} ${date}, ${year}, ${hour}:${min}:${sec}`;
+    }
+
 
     async function getGameCreate() {
         const sendOptions = {
@@ -95,22 +102,38 @@ export default function Content() {
             },
         };
 
-        setGameCreate(await Moralis.executeFunction(sendOptions));
+        const _gameCreate = await Moralis.executeFunction(sendOptions)
+        setGameCreate(_gameCreate)
+        const _date = moment.unix(_gameCreate[1]).format('LLLL')
+        setMatchDate(_date)       
     }
 
-    async function getMatchStatus() {
+    async function getMatchStatus(_matchDate) {
         const sendOptions = {
             contractAddress: SevillaVSValladolidContractAddress,
             functionName: "matchStatus",
             abi: betContractAbi,
         };
-        setMatchStatus(await Moralis.executeFunction(sendOptions));
-        if (matchStatus[3] == "finished") {
-            setCardDescription(matchStatus[1] + " - " + matchStatus[2] + " - Finished")
+
+        const _matchStatus = await Moralis.executeFunction(sendOptions);
+        
+        setMatchStatus(_matchStatus);
+
+        // _matchStatus[3] == "finished" ? console.log("listo") : console.log("lala")
+
+        if (_matchStatus[3] == "finished") {
+            setCardDescription(_matchStatus[1] + " - " + _matchStatus[2] + " - Finished")
             setIfFinishedHideButtons(true);
         } else {
-            setCardDescription("Pending - " + convertUnixTime(gameCreate[1]))
-        }
+            setCardDescription("Pending - " + _matchDate)
+         }
+
+        // if (matchStatus[3] == "finished") {
+        //     setCardDescription(matchStatus[1] + " - " + matchStatus[2] + " - Finished")
+        //     setIfFinishedHideButtons(true);
+        // } else {
+        //     setCardDescription("Pending - " + convertUnixTime(gameCreate[1]))
+        // }
     }
 
     return (
@@ -197,7 +220,7 @@ export default function Content() {
                                     abi: betContractAbi,
                                     params: {
                                         _choice: option,
-                                        _amount: amount * 10 ** 18
+                                        _amount: amount
                                     }
                                 }
                                 await Moralis.executeFunction(sendOptions);
